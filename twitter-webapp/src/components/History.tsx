@@ -8,7 +8,7 @@ const History = () => {
       {history.map((data) => (
         <div className="flex justify-between">
           <p className="font-serif">{data}</p>
-          <p className="text-red-500 font-extrabold">X</p>
+          <p className="text-red-500 font-extrabold cursor-pointer">X</p>
         </div>
       ))}
     </div>
