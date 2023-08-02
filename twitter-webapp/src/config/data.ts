@@ -33,6 +33,31 @@ export const postData = [
   },
 ];
 
+export const commentsData = [
+  {
+    profileImg:
+      "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568",
+    name: "Jack",
+    username: "@Jack",
+    desc: "Commentssss are onnn",
+  },
+  {
+    profileImg:
+      "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568",
+    name: "Lance",
+    username: "@Lance123",
+    desc: "Arda Güler has suffered a meniscus injury and will be out for the upcoming months, Real Madrid report. Get well soon, Arda 🤍🙏",
+    postImg: "https://ichef.bbci.co.uk/images/ic/640x360/p0fqd2bp.jpg",
+  },
+  {
+    profileImg:
+      "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568",
+    name: "Jack",
+    username: "@Jack",
+    desc: "Watch Naruto on animeplex Now !!!!",
+  },
+];
+
 export const forYouPost = [
   {
     profileImg:

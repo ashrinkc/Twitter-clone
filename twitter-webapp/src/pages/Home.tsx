@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import InputTweet from "../components/InputTweet";
 import Posts from "../components/Posts";
 import { forYouPost, postData } from "../config/data";
 
 const Home = () => {
   const [select, setIsSelect] = useState("FYP");
+  const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
   return (
     <div>
       <h1 className="font-bold text-lg">Home</h1>
@@ -31,7 +32,7 @@ const Home = () => {
         </div>
       </div>
       <div className="w-[100%] p-3">
-        <InputTweet />
+        <InputTweet Iref={inputRef} />
       </div>
       <div className="mt-10">
         {select === "Following" ? (

@@ -4,8 +4,42 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Modal } from "@mui/material";
+import TweetModal from "./TweetModal";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  // maxWidth: 600,
+
+  bgcolor: "background.paper",
+  borderRadius: "1vw",
+  //   border: "2px solid #000",
+  //   boxShadow: 24,
+  p: 2,
+};
 const Sidebar = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [selected, isSelected] = useState("Home");
+
+  const navigate = useNavigate();
+  const handleClick = (type: string) => {
+    isSelected(type);
+    if (type === "Home") {
+      navigate("/");
+    } else if (type === "Explore") {
+      navigate("/explore");
+    } else if (type === "Profile") {
+      navigate("/profile");
+    } else if (type === "Logout") {
+      navigate("/login");
+    }
+  };
   return (
     <div className="h-screen flex flex-col gap-10">
       <div className=" flex flex-col gap-7 cursor-pointer">
@@ -14,7 +48,7 @@ const Sidebar = () => {
             className={`flex gap-2  items-center ${
               selected === data.type ? "text-black" : "text-gray-500"
             }  p-2 rounded-3xl hover:bg-gray-100`}
-            onClick={() => isSelected(data.type)}
+            onClick={() => handleClick(data.type)}
           >
             {data.type === "Home" ? (
               <HomeIcon />
@@ -29,9 +63,22 @@ const Sidebar = () => {
           </div>
         ))}
       </div>
-      <button className="bg-blue-500 rounded-2xl p-3 w-[100%] text-white">
+      <button
+        onClick={handleOpen}
+        className="bg-blue-500 rounded-2xl p-3 w-[100%] text-white"
+      >
         Tweet
       </button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <TweetModal setOpen={setOpen} />
+        </Box>
+      </Modal>
     </div>
   );
 };
