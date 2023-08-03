@@ -9,11 +9,28 @@ export interface IPost {
   username: string;
   desc?: string;
   postImg?: string;
+  retweeted?: boolean;
 }
-const Posts = ({ profileImg, name, username, desc, postImg }: IPost) => {
+const Posts = ({
+  profileImg,
+  name,
+  username,
+  desc,
+  postImg,
+  retweeted,
+}: IPost) => {
   return (
     <Link to={`/p/${1}`}>
       <div className="hover:bg-gray-100 p-2">
+        <div
+          className={`flex gap-2 pl-3 pb-2 text-xs ${
+            retweeted ? "block" : "hidden"
+          }`}
+        >
+          <ReplayIcon style={{ fontSize: "20px" }} />
+          <p>You retweeted</p>
+        </div>
+
         <div className="flex gap-3">
           <div className="w-[8%]">
             <img className=" rounded-full h-10" src={profileImg} />

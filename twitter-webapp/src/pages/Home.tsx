@@ -45,6 +45,7 @@ const Home = () => {
                 postImg={data.postImg}
                 name={data.name}
                 username={data.username}
+                retweeted={data.retweet}
               />
             ))}{" "}
           </>

@@ -17,6 +17,7 @@ export const history = ["Barcelona", "OkOkOKOKO", "Barbie", "Hollywood"];
 
 export const postData = [
   {
+    retweet: true,
     profileImg:
       "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568",
     name: "Lance",
