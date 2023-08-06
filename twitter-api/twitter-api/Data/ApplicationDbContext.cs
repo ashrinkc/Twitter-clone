@@ -16,5 +16,7 @@ namespace twitter_api.Data
         public DbSet<History> Histories { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Follower> Followers { get; set; }
+        public DbSet<Following> Followings { get; set; }
     }
 }
