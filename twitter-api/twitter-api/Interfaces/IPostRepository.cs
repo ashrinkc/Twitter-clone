@@ -7,6 +7,7 @@ namespace twitter_api.Interfaces
         Task<Post> GetById(int id);
         Task<IEnumerable<Post>> GetAll();
         Task<IEnumerable<Post>> GetByUsers(int userId);
+        Task<IEnumerable<Post>> GetPostsAndQuotesByUser(int userId);
         Task<bool> IncreaseLike(int postId);
         Task<bool> DecreaseLike(int postId);
         Task<bool> IncreaseQuote(int postId);

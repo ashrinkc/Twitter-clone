@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\twitter-api",
-    "\\twitter-api\\Models"
+    "\\twitter-api\\Models",
+    "\\twitter-api\\Repository"
   ],
-  "SelectedNode": "\\twitter-api\\Models\\User.cs",
+  "SelectedNode": "\\twitter-api.sln",
   "PreviewInSolutionExplorer": false
 }

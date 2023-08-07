@@ -75,6 +75,23 @@ namespace twitter_api.Repository
             return await _context.Posts.Where(c => c.CreatorId == userId).ToListAsync();
         }
 
+        public async Task<IEnumerable<Post>> GetPostsAndQuotesByUser(int userId)
+        {
+            var posts = await _context.Posts
+                .Include(p => p.User)
+                .Where(p => p.CreatorId == userId)
+                .ToListAsync();
+            var quotesPost = await _context.Quotes
+                .Include(p => p.Post)
+                .Include(c => c.Post.User)
+                .Include(c => c.Comment)
+                .Where(q=>q.userId==userId)
+                .Select(q => q.Post)
+                .ToListAsync();
+            var allPosts = posts.Concat(quotesPost).OrderByDescending(p => p.createdDate);
+            return allPosts;
+        }
+
         public async Task<bool> IncreaseComment(int postId)
         {
             var post = await GetById(postId);

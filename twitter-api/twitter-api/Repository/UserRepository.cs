@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using twitter_api.Data;
 using twitter_api.Interfaces;
 using twitter_api.Models;
@@ -25,15 +26,27 @@ namespace twitter_api.Repository
             return Save();
         }
 
-        public bool FollowUser(Follower user)
+        public bool FollowUnfollowUser(int userId, int followId)
         {
-            var ifExists = _context.Followers.Where(c => c.UserId ==  && c.FollowersId == userId);
-            if (ifExists.Any())
+            var ifExists = _context.Followers.FirstOrDefault(c => c.UserId == followId  && c.FollowersId == userId);
+ 
+            if (ifExists != null)
             {
-                _context.Followers.Remove();
-                return Save();
+                _context.Followers.Remove(ifExists);
+                //Remove following as well
+                var following = _context.Followings.FirstOrDefault(c=>c.UserId==userId && c.FollowingId == followId);
+                if(following != null)
+                {
+                    _context.Followings.Remove(following);
+
+                }
             }
-            _context.Followers.Add();
+            else
+            {
+                _context.Followers.Add(new Follower { UserId=followId,FollowersId=userId});
+                _context.Followings.Add(new Following { UserId=userId, FollowingId=followId});
+
+            }
             return Save();
         }
 
@@ -45,6 +58,38 @@ namespace twitter_api.Repository
         public async Task<User> GetById(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<int> getFollowCount(int userId)
+        {
+            return await _context.Followers
+                 .Where(c => c.UserId == userId)
+                 .CountAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetFollowers(int userId)
+        {
+            return await _context.Followers
+                .Include(f => f.User)
+                .Where(c=>c.UserId==userId)
+                .Select(c=>c.User)
+                .ToListAsync();
+        }
+
+        public async Task<int> getFollowingCount(int userId)
+        {
+            return await _context.Followings
+                 .Where(c => c.UserId == userId)
+                 .CountAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetFollowings(int userId)
+        {
+            return await _context.Followings
+                .Include(f => f.User)
+                .Where(c => c.UserId == userId)
+                .Select(c => c.User)
+                .ToListAsync();
         }
 
         public bool Save()
