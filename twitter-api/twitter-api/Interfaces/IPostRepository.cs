@@ -14,8 +14,8 @@ namespace twitter_api.Interfaces
         Task<bool> DecreaseQuote(int postId);
         Task<bool> IncreaseComment(int postId);
         Task<bool> DecreaseComment(int postId);
-        bool Create(Post post);
-        bool Delete(Post post);
-        bool Save();
+        Task<bool> Create(Post post);
+        Task<bool> Delete(Post post);
+        Task<bool> Save();
     }
 }

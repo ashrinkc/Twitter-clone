@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using twitter_api.Data;
+using twitter_api.Interfaces;
+using twitter_api.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

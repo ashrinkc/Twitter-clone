@@ -13,10 +13,10 @@ namespace twitter_api.Repository
         {
             _context = context;
         } 
-        public bool Create(Post post)
+        public async Task<bool> Create(Post post)
         {
             _context.Posts.Add(post);
-            return Save();
+            return await Save();
         }
 
 
@@ -27,8 +27,8 @@ namespace twitter_api.Repository
             {
                 return false;
             }
-            post.comments -= 1;
-            return Save();
+            post.comments -= 1; 
+            return await Save();
         }
 
 
@@ -40,7 +40,7 @@ namespace twitter_api.Repository
                 return false;
             }
             post.likes -= 1;
-            return Save();
+            return await Save();
         }
 
         public async Task<bool> DecreaseQuote(int postId)
@@ -51,13 +51,13 @@ namespace twitter_api.Repository
                 return false;
             }
             post.quotes -= 1;
-            return Save();
+            return await Save();
         }
 
-        public bool Delete(Post post)
+        public async Task<bool> Delete(Post post)
         {
             _context.Posts.Remove(post);
-            return Save();
+            return await Save();
         }
 
         public async Task<IEnumerable<Post>> GetAll()
@@ -96,7 +96,7 @@ namespace twitter_api.Repository
         {
             var post = await GetById(postId);
             post.comments += 1;
-            return Save();
+            return await Save();
         }
 
 
@@ -104,19 +104,19 @@ namespace twitter_api.Repository
         {
             var post = await GetById(postId);
             post.likes += 1;
-            return Save();
+            return await Save();
         }
 
         public async Task<bool> IncreaseQuote(int postId)
         {
             var post = await GetById(postId);
             post.quotes += 1;
-            return Save();
+            return await Save();
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
+            var saved = await _context.SaveChangesAsync();
             return saved > 0 ? true : false;
         }
     }

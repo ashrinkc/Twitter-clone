@@ -2,6 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\twitter-api",
+    "\\twitter-api\\Interfaces",
     "\\twitter-api\\Models",
     "\\twitter-api\\Repository"
   ],

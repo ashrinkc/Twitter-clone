@@ -14,19 +14,19 @@ namespace twitter_api.Repository
         {
             _context = context;
         }
-        public bool Create(User user)
+        public async Task<bool> Create(User user)
         {
             _context.Users.Add(user);
-            return Save();
+            return await Save();
         }
 
-        public bool Delete(User user)
+        public async Task<bool> Delete(User user)
         {
             _context.Users.Remove(user);
-            return Save();
+            return await Save();
         }
 
-        public bool FollowUnfollowUser(int userId, int followId)
+        public async Task<bool> FollowUnfollowUser(int userId, int followId)
         {
             var ifExists = _context.Followers.FirstOrDefault(c => c.UserId == followId  && c.FollowersId == userId);
  
@@ -47,7 +47,7 @@ namespace twitter_api.Repository
                 _context.Followings.Add(new Following { UserId=userId, FollowingId=followId});
 
             }
-            return Save();
+            return await Save();
         }
 
         public async Task<IEnumerable<User>> GetAll()
@@ -92,16 +92,16 @@ namespace twitter_api.Repository
                 .ToListAsync();
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
+            var saved = await _context.SaveChangesAsync();
             return saved > 0 ? true : false;
         }
 
-        public bool Update(User user)
+        public async Task<bool> Update(User user)
         {
             _context.Users.Update(user);
-            return Save();
+            return await Save();
         }
     }
 }
