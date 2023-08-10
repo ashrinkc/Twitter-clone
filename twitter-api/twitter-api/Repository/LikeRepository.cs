@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using twitter_api.Data;
 using twitter_api.Interfaces;
 using twitter_api.Models;
@@ -13,10 +14,10 @@ namespace twitter_api.Repository
         {
             _context = context;
         }
-        public bool Add(Like like)
+        public async Task<bool> Add(Like like)
         {
             _context.Likes.Add(like);
-            return Save();
+            return await Save();
         }
 
         public async Task<IEnumerable<User>> GetUserLikedPostsOrComments(int postOrcommentId)
@@ -28,15 +29,22 @@ namespace twitter_api.Repository
                 .ToListAsync();
         }
 
-        public bool Remove(Like like)
+        public async Task<Like> FindLikedPosts(int postId,int userId)
         {
-            _context.Likes.Remove(like);
-            return Save();
+            return await _context.Likes
+            .FirstOrDefaultAsync(c => c.postOrcommentId == postId && c.userId == userId)
+        ;
         }
 
-        public bool Save()
+        public async Task<bool> Remove(Like like)
         {
-            var saved = _context.SaveChanges();
+            _context.Likes.Remove(like);
+            return await Save();
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = await _context.SaveChangesAsync();
             return saved > 0 ? true : false;
         }
     }

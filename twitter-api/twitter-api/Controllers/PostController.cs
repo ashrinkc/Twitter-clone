@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using System.Collections;
+using System.Linq.Expressions;
 using twitter_api.Interfaces;
 using twitter_api.Models;
 
@@ -11,11 +14,14 @@ namespace twitter_api.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ILikeRepository _likeRepository;
+        private readonly IQuoteRepository _quoteRepository;
 
-        public PostController(IPostRepository postRepository, ILikeRepository likeRepository)
+        public PostController(IPostRepository postRepository, ILikeRepository likeRepository,
+            IQuoteRepository quoteRepository)
         {
             _postRepository = postRepository;
             _likeRepository = likeRepository;
+            _quoteRepository = quoteRepository;
         }
         [HttpPost]
         public async Task<IActionResult> Create(Post post)
@@ -49,15 +55,52 @@ namespace twitter_api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPosts([FromQuery] int userId)
+        public async Task<IActionResult> GetAllPosts([FromQuery] int? userId)
         {
             var posts = await _postRepository.GetAll();
-            var likePosts = await _likeRepository.GetUserLikedPostsOrComments();
-            for(int i = 0; i < posts.Count(); i++)
+
+            if (userId == null)
             {
-                
+                return Ok(posts);
+
             }
-            return Ok(posts);
+            else
+            {
+                var arlist = new ArrayList();
+                foreach (var post in posts)
+                {
+                    var likePosts = await _likeRepository.FindLikedPosts(post.Id,(int)userId);
+                    if (likePosts == null)
+                    {
+                        arlist.Add(new {
+                            id=post.Id,
+                            creatorId=post.CreatorId,
+                            likes=post.likes,
+                            comments=post.comments,
+                            quotes=post.quotes,
+                            description=post.description,
+                            createdDate=post.createdDate,
+                            IsLike=false
+                        });
+                    }
+                    else
+                    {
+                        arlist.Add(new
+                        {
+                            id = post.Id,
+                            creatorId = post.CreatorId,
+                            likes = post.likes,
+                            comments = post.comments,
+                            quotes = post.quotes,
+                            description = post.description,
+                            createdDate = post.createdDate,
+                            IsLike = true
+                        });
+                    }
+                }
+                return Ok(arlist);
+            }
+            
         }
 
         [HttpGet("{id}")]
@@ -81,16 +124,42 @@ namespace twitter_api.Controllers
             return Ok(postsAndQuotes);
         }
 
-        //like post
+        //like/dislike post
         [HttpPost("/like/{postId}")]
-        public async Task<IActionResult> LikePost(int postId)
+        public async Task<IActionResult> LikeDislikePost(int postId,int userId)
         {
-            //in likerepo check if like is already presnt by the user before creating new like
-            //if like is already present call remove function to remove the like
-            //send like added or removed as return type so you can u can increase or decrease
-            //the like 
-            // Also while sending post check if the user has already liked th post
-            return Ok();
+            var likePosts = await _likeRepository.FindLikedPosts(postId, userId);
+            if(likePosts != null)
+            {
+                await _likeRepository.Remove(likePosts);
+                await _postRepository.DecreaseLike(postId);
+            }
+            else
+            {
+                var like = new Like
+                {
+                    postOrcommentId = postId,
+                    userId = userId
+                };
+                await _likeRepository.Add(like);
+                await _postRepository.IncreaseLike(postId);
+            }
+            return Ok("Successfully updated");
         }
+
+        [HttpPost("/quote/{postId}")]
+        public async Task<IActionResult> CreateQuote(int postId, [FromQuery] int userId)
+        {
+            var quote = new Quote
+            {
+                userId = userId,
+                postOrcommentId = postId,
+            };
+            _quoteRepository.Create(quote);
+            await _postRepository.IncreaseQuote(postId);
+            return Ok("Quote created");
+        }
+
+        
     }
 }

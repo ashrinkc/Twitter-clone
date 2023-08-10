@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IQuoteRepository, QuotesRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
