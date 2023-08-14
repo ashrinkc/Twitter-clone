@@ -4,6 +4,8 @@ namespace twitter_api.Interfaces
 {
     public interface IUserRepository
     {
+        Task<User> GetByEmail(string email);
+        Task<User> GetByUsername(string username);
         Task<User> GetById(int id);
         Task<IEnumerable<User>> GetAll();
         Task<bool> FollowUnfollowUser(int userId, int followId); //Reminder: make dto as  you need to retrieve both user and follower id. use params to get one id

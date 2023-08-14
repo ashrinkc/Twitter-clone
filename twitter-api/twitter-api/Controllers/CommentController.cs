@@ -49,7 +49,7 @@ namespace twitter_api.Controllers
                     arlist.Add(new
                     {
                         Id=comment.Id,
-                        commentorId=comment.commentorId,
+                        commentorId=comment.userId,
                         postId=comment.postId,
                         comment=comment.comment,
                         like=comment.like,

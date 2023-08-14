@@ -49,6 +49,7 @@ const Sidebar = () => {
               selected === data.type ? "text-black" : "text-gray-500"
             }  p-2 rounded-3xl hover:bg-gray-100`}
             onClick={() => handleClick(data.type)}
+            key={Math.random()}
           >
             {data.type === "Home" ? (
               <HomeIcon />

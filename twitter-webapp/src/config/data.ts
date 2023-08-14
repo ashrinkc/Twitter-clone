@@ -113,3 +113,5 @@ export const explorePost = [
     postImg: "https://ichef.bbci.co.uk/images/ic/640x360/p0fqd2bp.jpg",
   },
 ];
+
+export const api = "https://localhost:7105";

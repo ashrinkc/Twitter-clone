@@ -1,7 +1,9 @@
 // import axios from "axios";
 // import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { api } from "../config/data";
 // import AuthContext from "../context/AuthContext";
 // import GoogleLogin from "./GoogleLogin";
 
@@ -20,6 +22,7 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
   const regHandleChange = (e: React.ChangeEvent<HTMLButtonElement> | any) => {
     e.preventDefault();
     setRegInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(regInput);
   };
 
   const resetForm = () => {
@@ -31,45 +34,40 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
     });
   };
 
-  //To register a user
-  //   const register = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     const { confirmPassword, ...inputs } = regInput;
-  //     if (inputs.password !== confirmPassword) {
-  //       alert("Incorrect passwords");
-  //       return;
-  //     }
-  //     try {
-  //       const res = await axios.post(
-  //         "http://localhost:8080/user/register",
-  //         inputs
-  //       );
-  //       console.log(res);
-  //       resetForm();
-  //     } catch (err) {
-  //       console.log(err);
-  //       resetForm();
-  //     }
-  //   };
+  // To register a user
+  const register = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const { confirmPassword, ...inputs } = regInput;
+    if (inputs.password !== confirmPassword) {
+      alert("Incorrect passwords");
+      return;
+    }
+    try {
+      const res = await axios.post(`${api}/register`, inputs);
+      console.log(res);
+      resetForm();
+    } catch (err) {
+      console.log(err);
+      resetForm();
+    }
+  };
 
   const navigate = useNavigate();
-  //   const { setCurrentUser } = useContext(AuthContext);
-  //For user login
-  //   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     try {
-  //       const res = await axios.post(
-  //         "http://localhost:8080/user/login",
-  //         logInput
-  //       );
-  //       setCurrentUser(res.data.others);
-  //       localStorage.setItem("user", res.data.token);
+  // const { setCurrentUser } = useContext(AuthContext);
+  // For user login
+  const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${api}/login`, logInput);
+      // setCurrentUser(res.data.others);
+      // localStorage.setItem("user", res.data.token);
 
-  //       navigate("/");
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
+      navigate("/");
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleLogChange = (e: React.ChangeEvent<HTMLButtonElement> | any) => {
     e.preventDefault();
@@ -110,7 +108,7 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
           onChange={regHandleChange}
         />
         <button
-          //   onClick={register}
+          onClick={register}
           className="bg-blue-500 text-white p-1 font-serif text-sm  hover:text-blue-500 hover:bg-white rounded-md "
         >
           Register
@@ -145,7 +143,7 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
           onChange={handleLogChange}
         />
         <button
-          //   onClick={login}
+          onClick={login}
           className="bg-blue-500 text-white font-serif p-1 text-sm  hover:text-blue-500 hover:bg-white rounded-md "
         >
           Login

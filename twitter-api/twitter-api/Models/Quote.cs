@@ -3,8 +3,8 @@
     public class Quote
     {
         public int Id { get; set; }
-        public int userId { get; set; }
-        public int postOrcommentId { get; set; }
+        public int? userId { get; set; }
+        public int? postOrcommentId { get; set; }
         public DateTime DateTime { get; set; } = DateTime.Now;
         public bool IsQuote { get; set; } = true;
 

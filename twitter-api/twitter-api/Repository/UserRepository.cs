@@ -55,9 +55,19 @@ namespace twitter_api.Repository
             return await _context.Users.ToListAsync();
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.email == email);
+        }
+
         public async Task<User> GetById(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<User> GetByUsername(string username)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.username == username);
         }
 
         public async Task<int> getFollowCount(int userId)

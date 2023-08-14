@@ -15,20 +15,7 @@ namespace twitter_api.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var create = await _userRepository.Create(user);
-            if (!create)
-            {
-                return BadRequest("User create fail");
-            }
-            return Ok("User created successfully");
-        }
+       
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
