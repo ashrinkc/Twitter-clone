@@ -10,12 +10,14 @@ import Profile from "./pages/Profile";
 import IndividualPosts from "./pages/IndividualPosts";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import { RootState } from "./redux/store";
 
 function App() {
+  const user = useSelector((state: RootState) => state.auth.currentUser);
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: user ? <Layout /> : <Navigate to="/login" replace />,
       children: [
         {
           path: "/",
@@ -41,7 +43,7 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: !user ? <Login /> : <Navigate to="/" replace />,
     },
   ]);
   return (

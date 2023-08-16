@@ -4,8 +4,11 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../config/data";
+import { userLogin } from "../redux/authSlice";
 // import AuthContext from "../context/AuthContext";
 // import GoogleLogin from "./GoogleLogin";
+import { AppDispatch } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
   const [regInput, setRegInput] = useState({
@@ -55,15 +58,18 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
   const navigate = useNavigate();
   // const { setCurrentUser } = useContext(AuthContext);
   // For user login
+  const dispatch = useDispatch<AppDispatch>();
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${api}/login`, logInput);
+      const res = await dispatch(userLogin(logInput));
+      //  axios.post(`${api}/login`, logInput);
       // setCurrentUser(res.data.others);
       // localStorage.setItem("user", res.data.token);
+      // const donor: any = useSelector((state: RootState) => state.donor.currentUser);
 
       navigate("/");
-      console.log(res.data);
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
