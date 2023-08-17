@@ -133,13 +133,13 @@ namespace twitter_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CommentId")
+                    b.Property<int?>("CommentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<int?>("postOrcommentId")
@@ -167,12 +167,6 @@ namespace twitter_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("comments")
                         .HasColumnType("int");
 
@@ -191,9 +185,12 @@ namespace twitter_api.Migrations
                     b.Property<int>("quotes")
                         .HasColumnType("int");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("userId");
 
                     b.ToTable("Posts");
                 });
@@ -206,7 +203,7 @@ namespace twitter_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CommentId")
+                    b.Property<int?>("CommentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
@@ -215,7 +212,7 @@ namespace twitter_api.Migrations
                     b.Property<bool>("IsQuote")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<int?>("postOrcommentId")
@@ -245,6 +242,9 @@ namespace twitter_api.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("joinDate")
@@ -315,15 +315,11 @@ namespace twitter_api.Migrations
                 {
                     b.HasOne("twitter_api.Models.Comment", "Comment")
                         .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CommentId");
 
                     b.HasOne("twitter_api.Models.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.HasOne("twitter_api.Models.User", "User")
                         .WithMany()
@@ -340,7 +336,7 @@ namespace twitter_api.Migrations
                 {
                     b.HasOne("twitter_api.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -351,15 +347,11 @@ namespace twitter_api.Migrations
                 {
                     b.HasOne("twitter_api.Models.Comment", "Comment")
                         .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CommentId");
 
                     b.HasOne("twitter_api.Models.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.HasOne("twitter_api.Models.User", "User")
                         .WithMany()

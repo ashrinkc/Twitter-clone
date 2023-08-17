@@ -1,11 +1,26 @@
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import InputTweet from "../components/InputTweet";
 import Posts from "../components/Posts";
-import { forYouPost, postData } from "../config/data";
+import { api, forYouPost, postData } from "../config/data";
+import axios from "axios";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [select, setIsSelect] = useState("FYP");
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
+  const user = useSelector((state: RootState) => state.auth.currentUser);
+  useEffect(() => {
+    const getFypPosts = async () => {
+      try {
+        const res = await axios.get(`${api}/post?userId=${user.id}`);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFypPosts();
+  }, []);
   return (
     <div>
       <h1 className="font-bold text-lg">Home</h1>

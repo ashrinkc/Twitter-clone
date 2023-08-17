@@ -1,7 +1,14 @@
 import ImageIcon from "@mui/icons-material/Image";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { RefObject, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { IUserData } from "../redux/authSlice";
+import axios from "axios";
+import { api } from "../config/data";
 const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
+  const user = useSelector((state: RootState) => state.auth.currentUser);
+  console.log(user);
   const [input, setInput] = useState("");
   const [empty, isEmpty] = useState(true);
   useEffect(() => {
@@ -14,6 +21,23 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
       isEmpty(true);
     }
   }, [input, setInput]);
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (input.length <= 0) {
+      alert("nono");
+      return;
+    }
+    const data = {
+      description: input,
+      userId: user.id,
+    };
+    try {
+      const res = await axios.post(`${api}/post`, data);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="flex flex-col gap-1">
       <div className="flex gap-1">
@@ -39,6 +63,7 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
             className={`${
               empty ? "bg-blue-300" : "bg-blue-500"
             } text-white p-1 px-8 rounded-xl`}
+            onClick={handleClick}
           >
             Tweet
           </button>

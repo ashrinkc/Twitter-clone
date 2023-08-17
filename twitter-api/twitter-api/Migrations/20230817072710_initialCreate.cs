@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace twitter_api.Migrations
 {
-    public partial class initialcreate : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,7 @@ namespace twitter_api.Migrations
                     username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     joinDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -94,19 +95,18 @@ namespace twitter_api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
+                    userId = table.Column<int>(type: "int", nullable: false),
                     likes = table.Column<int>(type: "int", nullable: false),
                     quotes = table.Column<int>(type: "int", nullable: false),
                     comments = table.Column<int>(type: "int", nullable: false),
-                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Posts_Users_userId",
+                        column: x => x.userId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -149,8 +149,8 @@ namespace twitter_api.Migrations
                     userId = table.Column<int>(type: "int", nullable: true),
                     postOrcommentId = table.Column<int>(type: "int", nullable: true),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommentId = table.Column<int>(type: "int", nullable: false)
+                    PostId = table.Column<int>(type: "int", nullable: true),
+                    CommentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,14 +159,12 @@ namespace twitter_api.Migrations
                         name: "FK_Likes_Comments_CommentId",
                         column: x => x.CommentId,
                         principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Likes_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Likes_Users_userId",
                         column: x => x.userId,
@@ -184,8 +182,8 @@ namespace twitter_api.Migrations
                     postOrcommentId = table.Column<int>(type: "int", nullable: true),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsQuote = table.Column<bool>(type: "bit", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommentId = table.Column<int>(type: "int", nullable: false)
+                    PostId = table.Column<int>(type: "int", nullable: true),
+                    CommentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,14 +192,12 @@ namespace twitter_api.Migrations
                         name: "FK_Quotes_Comments_CommentId",
                         column: x => x.CommentId,
                         principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Quotes_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Quotes_Users_userId",
                         column: x => x.userId,
@@ -250,9 +246,9 @@ namespace twitter_api.Migrations
                 column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId",
+                name: "IX_Posts_userId",
                 table: "Posts",
-                column: "UserId");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quotes_CommentId",

@@ -8,7 +8,7 @@ import { userLogin } from "../redux/authSlice";
 // import AuthContext from "../context/AuthContext";
 // import GoogleLogin from "./GoogleLogin";
 import { AppDispatch } from "../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
   const [regInput, setRegInput] = useState({
@@ -56,7 +56,6 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
   };
 
   const navigate = useNavigate();
-  // const { setCurrentUser } = useContext(AuthContext);
   // For user login
   const dispatch = useDispatch<AppDispatch>();
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,9 +66,11 @@ const AuthForm = ({ isLogin }: { isLogin?: boolean }) => {
       // setCurrentUser(res.data.others);
       // localStorage.setItem("user", res.data.token);
       // const donor: any = useSelector((state: RootState) => state.donor.currentUser);
-
-      navigate("/");
-      console.log(res);
+      if (res.payload) {
+        navigate("/");
+      } else {
+        alert("Something went wrong");
+      }
     } catch (err) {
       console.log(err);
     }

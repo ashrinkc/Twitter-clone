@@ -62,7 +62,7 @@ namespace twitter_api.Repository
 
         public async Task<IEnumerable<Post>> GetAll()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts.Include(p=>p.User).ToListAsync();
         }
 
         public async Task<Post> GetById(int id)
@@ -72,14 +72,14 @@ namespace twitter_api.Repository
 
         public async Task<IEnumerable<Post>> GetByUsers(int userId)
         {
-            return await _context.Posts.Where(c => c.CreatorId == userId).ToListAsync();
+            return await _context.Posts.Where(c => c.userId == userId).ToListAsync();
         }
 
         public async Task<IEnumerable<Post>> GetPostsAndQuotesByUser(int userId)
         {
             var posts = await _context.Posts
                 .Include(p => p.User)
-                .Where(p => p.CreatorId == userId)
+                .Where(p => p.userId == userId)
                 .ToListAsync();
             var quotesPost = await _context.Quotes
                 .Include(p => p.Post)

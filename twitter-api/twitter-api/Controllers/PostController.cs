@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Collections;
 using System.Linq.Expressions;
@@ -72,14 +73,17 @@ namespace twitter_api.Controllers
                     var likePosts = await _likeRepository.FindLikedPosts(post.Id,(int)userId);
                     if (likePosts == null)
                     {
+                      
                         arlist.Add(new {
                             id=post.Id,
-                            creatorId=post.CreatorId,
+                            creatorId=post.userId,
                             likes=post.likes,
                             comments=post.comments,
                             quotes=post.quotes,
                             description=post.description,
                             createdDate=post.createdDate,
+                            creatorName=post.User.username,
+                            creatorEmail=post.User.email,
                             IsLike=false
                         });
                     }
@@ -88,12 +92,14 @@ namespace twitter_api.Controllers
                         arlist.Add(new
                         {
                             id = post.Id,
-                            creatorId = post.CreatorId,
+                            creatorId = post.userId,
                             likes = post.likes,
                             comments = post.comments,
                             quotes = post.quotes,
                             description = post.description,
                             createdDate = post.createdDate,
+                            creatorName = post.User?.username,
+                            creatorEmail = post.User?.email,
                             IsLike = true
                         });
                     }

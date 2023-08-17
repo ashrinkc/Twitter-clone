@@ -14,7 +14,7 @@ namespace twitter_api.Models
         public int like { get; set; } = 0;
         public int quotes { get; set; } = 0;
 
-        public User User { get; set; }
-        public Post Post { get; set; }
+        public User? User { get; set; }
+        public Post? Post { get; set; }
     }
 }

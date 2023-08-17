@@ -114,4 +114,4 @@ export const explorePost = [
   },
 ];
 
-export const api = "https://localhost:7105";
+export const api = "https://localhost:7105/api";

@@ -7,6 +7,6 @@
         public string Search { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

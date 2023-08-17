@@ -6,6 +6,6 @@
         public int UserId { get; set; }
         public int FollowingId { get; set; }
 
-        public User User { get; set; }  
+        public User? User { get; set; }  
     }
 }

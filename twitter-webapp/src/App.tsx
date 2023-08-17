@@ -11,9 +11,10 @@ import IndividualPosts from "./pages/IndividualPosts";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { RootState } from "./redux/store";
+import { useSelector } from "react-redux";
 
 function App() {
-  const user = useSelector((state: RootState) => state.auth.currentUser);
+  const user = useSelector((state: RootState) => state.auth.currentUser.id);
   const router = createBrowserRouter([
     {
       path: "/",

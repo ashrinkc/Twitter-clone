@@ -8,8 +8,8 @@
         public DateTime DateTime { get; set; } = DateTime.Now;
         public bool IsQuote { get; set; } = true;
 
-        public User User { get; set; }
-        public Post Post { get; set; }
-        public Comment Comment { get; set; }
+        public User? User { get; set; }
+        public Post? Post { get; set; }
+        public Comment? Comment { get; set; }
     }
 }

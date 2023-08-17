@@ -7,7 +7,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import TweetModal from "./TweetModal";
-
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { clearCurrentUser } from "../redux/authSlice";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -28,7 +30,9 @@ const Sidebar = () => {
   const [selected, isSelected] = useState("Home");
 
   const navigate = useNavigate();
-  const handleClick = (type: string) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleClick = async (type: string) => {
     isSelected(type);
     if (type === "Home") {
       navigate("/");
@@ -37,6 +41,7 @@ const Sidebar = () => {
     } else if (type === "Profile") {
       navigate("/profile");
     } else if (type === "Logout") {
+      await dispatch(clearCurrentUser());
       navigate("/login");
     }
   };
