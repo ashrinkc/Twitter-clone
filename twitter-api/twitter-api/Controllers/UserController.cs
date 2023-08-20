@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using twitter_api.Dto;
 using twitter_api.Interfaces;
 using twitter_api.Models;
 
@@ -51,15 +52,22 @@ namespace twitter_api.Controllers
             return Ok(user);
         }
 
-        [HttpPost("/followUnfollow/{userId}")]
-        public async Task<IActionResult> FollowUnfollowUser(int userId,int followId)
+        [HttpPost("/api/followUnfollow")]
+        public async Task<IActionResult> FollowUnfollowUser(FollowUnfollowDto data)
         {
-            var flo = await _userRepository.FollowUnfollowUser(userId,followId);
+            var flo = await _userRepository.FollowUnfollowUser(data.userId,data.followId);
             if (!flo)
             {
                 return BadRequest();
             }
             return Ok("Successfully updated");
+        }
+
+        [HttpPost("/api/isFollowed")]
+        public async Task<IActionResult> IsFollowed(FollowUnfollowDto data)
+        {
+            var flo = await _userRepository.GetIsFollowedOrNot(data.userId,data.followId);
+            return Ok(flo);
         }
 
         [HttpGet("/followCount/{userId}")]

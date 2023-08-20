@@ -31,7 +31,7 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
+  // const user = useSelector((state: RootState) => state.auth.currentUser);
   const handleClick = async (type: string) => {
     isSelected(type);
     if (type === "Home") {

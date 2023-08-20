@@ -50,6 +50,19 @@ namespace twitter_api.Repository
             return await Save();
         }
 
+        public async Task<bool> GetIsFollowedOrNot(int userId,int followId)
+        {
+            var ifExists = await _context.Followings.FirstOrDefaultAsync(c => c.UserId == userId && c.FollowingId == followId);
+            if(ifExists != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<IEnumerable<User>> GetAll()
         {
             return await _context.Users.ToListAsync();

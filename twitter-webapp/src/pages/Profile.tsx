@@ -1,10 +1,14 @@
 import CakeIcon from "@mui/icons-material/Cake";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Posts from "../components/Posts";
-import { profilePost } from "../config/data";
+import { api, profilePost } from "../config/data";
 import { Box, Modal } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditProfile from "../components/EditProfile";
+import { useLocation } from "react-router-dom";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const style = {
   position: "absolute" as "absolute",
@@ -20,8 +24,42 @@ const style = {
 };
 const Profile = () => {
   const [open, setOpen] = useState(false);
+  const [hasFollowed, setHasFollowed] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const user = useSelector((state: RootState) => state.auth.currentUser);
+  const selectedId = useLocation().state;
+  var isUser = true;
+  if (selectedId != null) {
+    isUser = user.id === selectedId;
+  }
+  useEffect(() => {
+    const data = {
+      userId: user?.id,
+      followId: selectedId,
+    };
+    const getRes = async () => {
+      try {
+        const res = await axios.post(`${api}/isFollowed`, data);
+        setHasFollowed(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getRes();
+  }, []);
+  const handleFollow = async () => {
+    const data = {
+      userId: user?.id,
+      followId: selectedId,
+    };
+    try {
+      const res = await axios.post(`${api}/followUnfollow`, data);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className=" h-screen">
       <div className="relative h-[40%]">
@@ -34,12 +72,21 @@ const Profile = () => {
           src="https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568"
         />
         <div className="absolute right-7 mt-2">
-          <button
-            className="rounded-3xl border border-black p-1 w-28"
-            onClick={handleOpen}
-          >
-            Edit profile
-          </button>
+          {isUser ? (
+            <button
+              className="rounded-3xl border border-black p-1 w-28"
+              onClick={handleOpen}
+            >
+              Edit profile
+            </button>
+          ) : (
+            <button
+              className="rounded-3xl border border-black p-1 w-28"
+              onClick={handleFollow}
+            >
+              {hasFollowed ? "Unfollow" : "Follow"}
+            </button>
+          )}
         </div>
         <Modal
           open={open}
