@@ -8,17 +8,28 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const [select, setIsSelect] = useState("FYP");
+  const [fyp, setFyp] = useState([]);
+  const [follP, setFollP] = useState([]);
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
   const user = useSelector((state: RootState) => state.auth.currentUser);
   useEffect(() => {
     const getFypPosts = async () => {
       try {
         const res = await axios.get(`${api}/post?userId=${user.id}`);
-        console.log(res.data);
+        setFyp(res.data);
       } catch (err) {
         console.log(err);
       }
     };
+    const getFollowingsPosts = async () => {
+      try {
+        const res = await axios.get(`${api}/getFollowingsPost/${user.id}`);
+        setFollP(res.data[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFollowingsPosts();
     getFypPosts();
   }, []);
   return (
@@ -53,27 +64,39 @@ const Home = () => {
         {select === "Following" ? (
           <>
             {" "}
-            {postData.map((data) => (
+            {follP?.map((data: any) => (
               <Posts
                 profileImg={data.profileImg}
-                desc={data.desc}
+                desc={data.description}
                 postImg={data.postImg}
-                name={data.name}
-                username={data.username}
+                name={data.user.username}
+                username={data.user.email}
                 retweeted={data.retweet}
+                isLike={data.isLike}
+                comments={data.comments}
+                likes={data.likes}
+                quotes={data.quotes}
+                id={data.id}
+                creatorId={data.userId}
               />
             ))}{" "}
           </>
         ) : (
           <>
             {" "}
-            {forYouPost.map((data) => (
+            {fyp?.map((data: any) => (
               <Posts
                 profileImg={data.profileImg}
-                desc={data.desc}
+                desc={data.description}
                 postImg={data.postImg}
-                name={data.name}
-                username={data.username}
+                name={data.creatorEmail}
+                username={data.creatorName}
+                id={data.id}
+                isLike={data.isLike}
+                comments={data.comments}
+                likes={data.likes}
+                quotes={data.quotes}
+                creatorId={data.creatorId}
               />
             ))}
           </>

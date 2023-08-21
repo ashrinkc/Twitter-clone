@@ -17,7 +17,7 @@ namespace twitter_api.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpPost("/register")]
+        [HttpPost("/api/register")]
         public async Task<IActionResult> Create(User user)
         {
             if (!ModelState.IsValid)
@@ -38,7 +38,7 @@ namespace twitter_api.Controllers
             return Ok("User created successfully");
         }
 
-        [HttpPost("/login")]
+        [HttpPost("/api/login")]
         public async Task<IActionResult> Login(LoginDto data)
         {
             var user = await _userRepository.GetByUsername(data.username);

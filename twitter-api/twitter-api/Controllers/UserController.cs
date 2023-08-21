@@ -70,28 +70,28 @@ namespace twitter_api.Controllers
             return Ok(flo);
         }
 
-        [HttpGet("/followCount/{userId}")]
+        [HttpGet("/api/followCount/{userId}")]
         public async Task<IActionResult> GetFollowCount(int userId)
         {
             var followersCount = await _userRepository.getFollowCount(userId);
             return Ok(followersCount);
         }
 
-        [HttpGet("/followers/{userId}")]
+        [HttpGet("/api/followers/{userId}")]
         public async Task<IActionResult> GetFollowers(int userId)
         {
             var followers = await _userRepository.GetFollowers(userId);
             return Ok(followers);
         }
 
-        [HttpGet("/followingCount/{userId}")]
+        [HttpGet("/api/followingCount/{userId}")]
         public async Task<IActionResult> GetFollowingsCount(int userId)
         {
             var followingsCount = await _userRepository.getFollowingCount(userId);
             return Ok(followingsCount);
         }
 
-        [HttpGet("/followings/{userId}")]
+        [HttpGet("/api/followings/{userId}")]
         public async Task<IActionResult> GetFollowings(int userId)
         {
             var followings = await _userRepository.GetFollowings(userId);

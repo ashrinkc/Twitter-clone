@@ -109,6 +109,18 @@ namespace twitter_api.Controllers
             
         }
 
+        [HttpGet("/api/getFollowingsPost/{userId}")]
+        public async Task<IActionResult> getFollowingsPost(int userId)
+        {
+            var userIds = await _postRepository.GetAllFollingUserId(userId);
+            var arlist = new ArrayList();
+            foreach (var id in userIds) {
+                var posts = await _postRepository.GetByUsers(id);
+                arlist.Add(posts);
+            }
+            return Ok(arlist);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPost(int id)
         {
@@ -116,14 +128,14 @@ namespace twitter_api.Controllers
             return Ok(post);
         }
 
-        [HttpGet("/userPosts/{userId}")]
+        [HttpGet("/api/userPosts/{userId}")]
         public async Task<IActionResult> GetUserPosts(int userId)
         {
             var posts = await _postRepository.GetByUsers(userId);
             return Ok(posts);
         }
 
-        [HttpGet("/userPostsQuotes/{userId}")]
+        [HttpGet("/api/userPostsQuotes/{userId}")]
         public async Task<IActionResult> GetUserPostsQuotes(int userId)
         {
             var postsAndQuotes = await _postRepository.GetPostsAndQuotesByUser(userId);

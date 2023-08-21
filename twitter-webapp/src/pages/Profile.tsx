@@ -23,21 +23,59 @@ const style = {
   p: 1,
 };
 const Profile = () => {
+  interface Iuser {
+    email: string;
+    username: string;
+  }
   const [open, setOpen] = useState(false);
   const [hasFollowed, setHasFollowed] = useState();
+  const [posts, setPosts] = useState([]);
+  const [userS, setUserS] = useState<Iuser>();
+  const [foll, setFoll] = useState();
+  const [flo, setFlo] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector((state: RootState) => state.auth.currentUser);
   const selectedId = useLocation().state;
+
   var isUser = true;
   if (selectedId != null) {
     isUser = user.id === selectedId;
   }
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const res = await axios.get(`${api}/User/${selectedId}`);
+        setUserS(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserData();
+    const getUserFollowCount = async () => {
+      try {
+        var id = user.id;
+        if (selectedId != null) {
+          id = selectedId;
+        }
+        const flo = await axios.get(`${api}/followCount/${id}`);
+        const foll = await axios.get(`${api}/followingCount/${id}`);
+        setFlo(flo.data);
+        setFoll(foll.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserFollowCount();
+  }, [selectedId]);
+
   useEffect(() => {
     const data = {
       userId: user?.id,
       followId: selectedId,
     };
+
     const getRes = async () => {
       try {
         const res = await axios.post(`${api}/isFollowed`, data);
@@ -46,8 +84,23 @@ const Profile = () => {
         console.log(err);
       }
     };
+
+    const getUserPosts = async () => {
+      try {
+        var id = user.id;
+        if (selectedId != null) {
+          id = selectedId;
+        }
+        const res = await axios.get(`${api}/userPostsQuotes/${id}`);
+        setPosts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserPosts();
     getRes();
   }, []);
+
   const handleFollow = async () => {
     const data = {
       userId: user?.id,
@@ -60,6 +113,7 @@ const Profile = () => {
       console.log(err);
     }
   };
+
   return (
     <div className=" h-screen">
       <div className="relative h-[40%]">
@@ -100,8 +154,12 @@ const Profile = () => {
         </Modal>
       </div>
       <div className="mt-2">
-        <h1 className=" font-bold text-xl">Ashrin K.C</h1>
-        <p className="text-gray-500">@ashrin_c</p>
+        <h1 className=" font-bold text-xl">
+          {selectedId ? userS?.username : user.username}
+        </h1>
+        <p className="text-gray-500">
+          {selectedId ? userS?.email : user.email}
+        </p>
         <div className="flex gap-5 text-gray-500 font-mono items-center mt-2">
           {/* <p className="flex items-center justify-center gap-2">
             <CakeIcon />
@@ -115,22 +173,31 @@ const Profile = () => {
       </div>
       <div className="flex gap-3 mt-2">
         <p className="font-semibold">
-          91 <a className="text-gray-500">Followers</a>
+          {flo}
+          <a className="text-gray-500">Followers</a>
         </p>
         <p className="font-semibold">
-          60 <a className="text-gray-500">Following</a>
+          {foll} <a className="text-gray-500">Following</a>
         </p>
       </div>
       <div className="mt-2">
-        {profilePost.map((data) => (
-          <Posts
-            profileImg={data.profileImg}
-            desc={data.desc}
-            postImg={data.postImg}
-            name={data.name}
-            username={data.username}
-          />
-        ))}
+        {posts.length > 0 ? (
+          <>
+            {posts.map((data: any) => (
+              <Posts
+                profileImg={data.profileImg}
+                desc={data.description}
+                postImg={data.image}
+                name={data.user.username}
+                username={data.user.email}
+              />
+            ))}
+          </>
+        ) : (
+          <div className="flex justify-center items-center mt-4 text-xl">
+            <h1>No Posts</h1>
+          </div>
+        )}
       </div>
     </div>
   );

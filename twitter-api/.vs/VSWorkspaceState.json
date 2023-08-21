@@ -3,6 +3,7 @@
     "",
     "\\twitter-api",
     "\\twitter-api\\Controllers",
+    "\\twitter-api\\Dto",
     "\\twitter-api\\Interfaces",
     "\\twitter-api\\Models",
     "\\twitter-api\\Repository"

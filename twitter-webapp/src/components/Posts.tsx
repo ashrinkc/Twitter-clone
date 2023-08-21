@@ -10,6 +10,12 @@ export interface IPost {
   desc?: string;
   postImg?: string;
   retweeted?: boolean;
+  id?: string;
+  isLike?: boolean;
+  likes?: number;
+  quotes?: number;
+  comments?: number;
+  creatorId?: number;
 }
 const Posts = ({
   profileImg,
@@ -18,6 +24,11 @@ const Posts = ({
   desc,
   postImg,
   retweeted,
+  id,
+  isLike,
+  likes,
+  quotes,
+  comments,
 }: IPost) => {
   return (
     <Link to={`/p/${1}`}>
@@ -33,7 +44,14 @@ const Posts = ({
 
         <div className="flex gap-3">
           <div className="w-[8%]">
-            <img className=" rounded-full h-10" src={profileImg} />
+            <img
+              className=" rounded-full h-10"
+              src={
+                profileImg
+                  ? profileImg
+                  : "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568"
+              }
+            />
           </div>
           <div className="w-[100%]">
             <h5 className="font-semibold">
@@ -43,13 +61,13 @@ const Posts = ({
             <img className=" rounded-xl mt-4 max-h-[60vh]" src={postImg} />
             <div className="flex justify-around mt-2 ">
               <p>
-                <InsertCommentIcon /> 0
+                <InsertCommentIcon /> {comments}
               </p>
               <p>
-                <ReplayIcon /> 0
+                <ReplayIcon /> {quotes}
               </p>
               <p>
-                <FavoriteBorderIcon /> 0
+                <FavoriteBorderIcon /> {likes}
               </p>
             </div>
           </div>

@@ -65,6 +65,13 @@ namespace twitter_api.Repository
             return await _context.Posts.Include(p=>p.User).ToListAsync();
         }
 
+        public async Task<IEnumerable<int>> GetAllFollingUserId(int userId)
+        {
+            var Ids = await _context.Followings.Where(c => c.UserId == userId)
+                .Select(c => c.FollowingId).ToListAsync();
+            return Ids;
+        }
+
         public async Task<Post> GetById(int id)
         {
             return await _context.Posts.FirstOrDefaultAsync(c => c.Id == id);
@@ -72,7 +79,7 @@ namespace twitter_api.Repository
 
         public async Task<IEnumerable<Post>> GetByUsers(int userId)
         {
-            return await _context.Posts.Where(c => c.userId == userId).ToListAsync();
+            return await _context.Posts.Include(c=>c.User).Where(c => c.userId == userId).ToListAsync();
         }
 
         public async Task<IEnumerable<Post>> GetPostsAndQuotesByUser(int userId)
