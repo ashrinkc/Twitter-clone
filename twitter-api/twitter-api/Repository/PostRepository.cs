@@ -74,7 +74,7 @@ namespace twitter_api.Repository
 
         public async Task<Post> GetById(int id)
         {
-            return await _context.Posts.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Posts.Include(c=>c.User).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<IEnumerable<Post>> GetByUsers(int userId)

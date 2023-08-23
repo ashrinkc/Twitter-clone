@@ -2,11 +2,43 @@ import React, { useEffect, useState } from "react";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
 import ReplayIcon from "@mui/icons-material/Replay";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { commentsData } from "../config/data";
+import { api, commentsData } from "../config/data";
 import Comments from "../components/Comments";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
 const IndividualPosts = () => {
+  type IuserIP = {
+    comments: number;
+    createdDate: string;
+    description: string;
+    id: number;
+    likes: number;
+    quotes: number;
+    user: {
+      email: string;
+      id: number;
+      username: string;
+    };
+  };
   const [input, setInput] = useState("");
   const [empty, isEmpty] = useState(true);
+  const [post, setPost] = useState<IuserIP>();
+  const pIn = useLocation().state;
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getIndividualPost = async () => {
+      try {
+        const res = await axios.get(`${api}/Post/${id}`);
+        console.log(res.data);
+        setPost(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getIndividualPost();
+  }, [id]);
+
   useEffect(() => {
     if (input.length > 0) {
       isEmpty(false);
@@ -26,22 +58,26 @@ const IndividualPosts = () => {
           </div>
           <div className="w-[100%]">
             <h5 className="font-semibold">
-              Xrinn<a className="text-gray-500 font-medium">@Ashrin</a>
+              {pIn?.username}
+              <a className="text-gray-500 font-medium ml-2">{pIn?.name}</a>
             </h5>
-            <p>Amazing bird flying in the sky</p>
-            <img
+            <p>{pIn?.desc}</p>
+            {/* <img
               className=" rounded-xl mt-4 max-h-[60vh]"
               src="https://ichef.bbci.co.uk/images/ic/640x360/p0fqd2bp.jpg"
-            />
+            /> */}
             <div className="flex justify-around mt-2 ">
               <p>
-                <InsertCommentIcon /> 0
+                <InsertCommentIcon /> {pIn?.comments}
               </p>
               <p>
-                <ReplayIcon /> 0
+                <ReplayIcon /> {pIn?.quotes}
               </p>
               <p>
-                <FavoriteBorderIcon /> 0
+                <FavoriteBorderIcon
+                  className={`${pIn?.isLike && "text-red-500"}`}
+                />{" "}
+                {pIn?.likes}
               </p>
             </div>
           </div>

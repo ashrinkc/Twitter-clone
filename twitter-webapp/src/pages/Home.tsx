@@ -24,7 +24,8 @@ const Home = () => {
     const getFollowingsPosts = async () => {
       try {
         const res = await axios.get(`${api}/getFollowingsPost/${user.id}`);
-        setFollP(res.data[0]);
+        console.log(res.data);
+        setFollP(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -69,15 +70,14 @@ const Home = () => {
                 profileImg={data.profileImg}
                 desc={data.description}
                 postImg={data.postImg}
-                name={data.user.username}
-                username={data.user.email}
-                retweeted={data.retweet}
+                name={data.creatorEmail}
+                username={data.creatorName}
+                id={data.id}
                 isLike={data.isLike}
                 comments={data.comments}
                 likes={data.likes}
                 quotes={data.quotes}
-                id={data.id}
-                creatorId={data.userId}
+                creatorId={data.creatorId}
               />
             ))}{" "}
           </>

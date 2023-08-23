@@ -8,7 +8,6 @@ import axios from "axios";
 import { api } from "../config/data";
 const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
   const user = useSelector((state: RootState) => state.auth.currentUser);
-  console.log(user);
   const [input, setInput] = useState("");
   const [empty, isEmpty] = useState(true);
   useEffect(() => {
@@ -33,7 +32,6 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
     };
     try {
       const res = await axios.post(`${api}/post`, data);
-      console.log(res);
     } catch (err) {
       console.log(err);
     }

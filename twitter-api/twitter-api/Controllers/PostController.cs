@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Collections;
 using System.Linq.Expressions;
+using twitter_api.Dto;
 using twitter_api.Interfaces;
 using twitter_api.Models;
 
@@ -116,7 +117,23 @@ namespace twitter_api.Controllers
             var arlist = new ArrayList();
             foreach (var id in userIds) {
                 var posts = await _postRepository.GetByUsers(id);
-                arlist.Add(posts);
+                foreach (var post in posts)
+                {
+                    var likePosts = await _likeRepository.FindLikedPosts(post.Id, userId);
+                    arlist.Add(new
+                    {
+                        id = post.Id,
+                        creatorId = post.userId,
+                        likes = post.likes,
+                        comments = post.comments,
+                        quotes = post.quotes,
+                        description = post.description,
+                        createdDate = post.createdDate,
+                        creatorName = post.User.username,
+                        creatorEmail = post.User.email,
+                        isLike = likePosts != null,
+                    });
+                }
             }
             return Ok(arlist);
         }
@@ -139,28 +156,46 @@ namespace twitter_api.Controllers
         public async Task<IActionResult> GetUserPostsQuotes(int userId)
         {
             var postsAndQuotes = await _postRepository.GetPostsAndQuotesByUser(userId);
-            return Ok(postsAndQuotes);
+            var arlist = new ArrayList();
+            foreach (var post in postsAndQuotes)
+            {
+                var likePosts = await _likeRepository.FindLikedPosts(post.Id, userId);
+                arlist.Add(new
+                {
+                    id = post.Id,
+                    creatorId = post.userId,
+                    likes = post.likes,
+                    comments = post.comments,
+                    quotes = post.quotes,
+                    description = post.description,
+                    createdDate = post.createdDate,
+                    creatorName = post.User.username,
+                    creatorEmail = post.User.email,
+                    isLike = likePosts != null,
+                });
+            }
+            return Ok(arlist);
         }
 
         //like/dislike post
-        [HttpPost("/like/{postId}")]
-        public async Task<IActionResult> LikeDislikePost(int postId,int userId)
+        [HttpPost("/api/likeUnlike")]
+        public async Task<IActionResult> LikeDislikePost(LikeDto data)
         {
-            var likePosts = await _likeRepository.FindLikedPosts(postId, userId);
+            var likePosts = await _likeRepository.FindLikedPosts(data.postId, data.userId);
             if(likePosts != null)
             {
                 await _likeRepository.Remove(likePosts);
-                await _postRepository.DecreaseLike(postId);
+                await _postRepository.DecreaseLike(data.postId);
             }
             else
             {
                 var like = new Like
                 {
-                    postOrcommentId = postId,
-                    userId = userId
+                    postOrcommentId = data.postId,
+                    userId = data.userId
                 };
                 await _likeRepository.Add(like);
-                await _postRepository.IncreaseLike(postId);
+                await _postRepository.IncreaseLike(data.postId);
             }
             return Ok("Successfully updated");
         }

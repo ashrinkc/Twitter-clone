@@ -187,9 +187,15 @@ const Profile = () => {
               <Posts
                 profileImg={data.profileImg}
                 desc={data.description}
-                postImg={data.image}
-                name={data.user.username}
-                username={data.user.email}
+                postImg={data.postImg}
+                name={data.creatorEmail}
+                username={data.creatorName}
+                id={data.id}
+                isLike={data.isLike}
+                comments={data.comments}
+                likes={data.likes}
+                quotes={data.quotes}
+                creatorId={data.creatorId}
               />
             ))}
           </>

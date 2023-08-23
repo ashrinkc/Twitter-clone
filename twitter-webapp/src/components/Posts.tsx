@@ -2,6 +2,10 @@ import InsertCommentIcon from "@mui/icons-material/InsertComment";
 import ReplayIcon from "@mui/icons-material/Replay";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import axios from "axios";
+import { api } from "../config/data";
 
 export interface IPost {
   profileImg?: string;
@@ -10,7 +14,7 @@ export interface IPost {
   desc?: string;
   postImg?: string;
   retweeted?: boolean;
-  id?: string;
+  id?: number;
   isLike?: boolean;
   likes?: number;
   quotes?: number;
@@ -30,8 +34,38 @@ const Posts = ({
   quotes,
   comments,
 }: IPost) => {
+  const user = useSelector((state: RootState) => state.auth.currentUser);
+  const handleLike = async () => {
+    const data = {
+      userId: user.id,
+      postId: id,
+    };
+    try {
+      const res = await axios.post(`${api}/likeUnlike`, data);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <Link to={`/p/${1}`}>
+    <Link
+      to={`/p/${id}`}
+      state={{
+        id,
+        name,
+        profileImg,
+
+        username,
+        desc,
+        postImg,
+        retweeted,
+
+        isLike,
+        likes,
+        quotes,
+        comments,
+      }}
+    >
       <div className="hover:bg-gray-100 p-2">
         <div
           className={`flex gap-2 pl-3 pb-2 text-xs ${
@@ -66,8 +100,9 @@ const Posts = ({
               <p>
                 <ReplayIcon /> {quotes}
               </p>
-              <p>
-                <FavoriteBorderIcon /> {likes}
+              <p onClick={handleLike}>
+                <FavoriteBorderIcon className={`${isLike && "text-red-500"}`} />{" "}
+                {likes}
               </p>
             </div>
           </div>
