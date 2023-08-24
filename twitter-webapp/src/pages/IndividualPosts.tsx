@@ -6,6 +6,8 @@ import { api, commentsData } from "../config/data";
 import Comments from "../components/Comments";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 const IndividualPosts = () => {
   type IuserIP = {
     comments: number;
@@ -23,14 +25,15 @@ const IndividualPosts = () => {
   const [input, setInput] = useState("");
   const [empty, isEmpty] = useState(true);
   const [post, setPost] = useState<IuserIP>();
+  const [comment, setComment] = useState([]);
   const pIn = useLocation().state;
   const { id } = useParams();
+  const user = useSelector((state: RootState) => state.auth.currentUser);
 
   useEffect(() => {
     const getIndividualPost = async () => {
       try {
         const res = await axios.get(`${api}/Post/${id}`);
-        console.log(res.data);
         setPost(res.data);
       } catch (err) {
         console.log(err);
@@ -46,6 +49,39 @@ const IndividualPosts = () => {
       isEmpty(true);
     }
   }, [input, setInput]);
+
+  const handleComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      if (input.length < 0) {
+        return;
+      }
+      const data = {
+        comment: input,
+        postId: pIn.id,
+        userId: user.id,
+      };
+      await axios.post(`${api}/Comment`, data);
+      setInput("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const res = await axios.get(
+          `${api}/Comment/${pIn.id}?userId=${user.id}`
+        );
+        setComment(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getComments();
+  }, []);
+
   return (
     <div className="p-4">
       <div>
@@ -99,18 +135,24 @@ const IndividualPosts = () => {
           className={`${
             empty ? "bg-blue-300" : "bg-blue-500"
           } text-white px-5 rounded-3xl`}
+          onClick={handleComment}
         >
           Reply
         </button>
       </div>
       <div className="mt-4">
-        {commentsData.map((data) => (
+        {comment?.map((data: any) => (
           <Comments
             profileImg={data.profileImg}
-            desc={data.desc}
-            postImg={data.postImg}
-            name={data.name}
-            username={data.username}
+            desc={data.comment}
+            // postImg={data.postImg}
+            id={data.id}
+            name={data.creatorName}
+            username={data.creatorEmail}
+            created={data.date}
+            quotes={data.quotes}
+            like={data.like}
+            isLike={data.isLike}
           />
         ))}
       </div>

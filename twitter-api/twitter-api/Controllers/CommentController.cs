@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System.Collections;
+using twitter_api.Dto;
 using twitter_api.Interfaces;
 using twitter_api.Models;
 using twitter_api.Repository;
@@ -55,7 +57,9 @@ namespace twitter_api.Controllers
                         like=comment.like,
                         quotes=comment.quotes,
                         date=comment.Created,
-                        isLike=isLiked!=null,
+                        creatorName = comment.User.username,
+                        creatorEmail = comment.User.email,
+                        isLike =isLiked!=null,
                     });
                 }
                 return Ok(arlist);
@@ -71,24 +75,24 @@ namespace twitter_api.Controllers
         }
 
         //like/dislike comment
-        [HttpPost("/like/{commentId}")]
-        public async Task<IActionResult> LikeDislikeComment(int commentId, int userId)
+        [HttpPost("/api/like")]
+        public async Task<IActionResult> LikeDislikeComment(AddComment data)
         {
-            var likeComment = await _likeRepository.FindLikedPosts(commentId, userId);
+            var likeComment = await _likeRepository.FindLikedPosts(data.commentId, data.userId);
             if (likeComment != null)
             {
                 await _likeRepository.Remove(likeComment);
-                await _commentRepository.DecreaseLike(commentId);
+                await _commentRepository.DecreaseLike(data.commentId);
             }
             else
             {
                 var like = new Like
                 {
-                    postOrcommentId = commentId,
-                    userId = userId
+                    postOrcommentId = data.commentId,
+                    userId = data.userId
                 };
                 await _likeRepository.Add(like);
-                await _commentRepository.IncreaseLike(commentId);
+                await _commentRepository.IncreaseLike(data.commentId);
             }
             return Ok("Successfully updated");
         }

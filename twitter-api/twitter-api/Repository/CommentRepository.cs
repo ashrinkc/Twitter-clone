@@ -16,6 +16,8 @@ namespace twitter_api.Repository
         public bool Add(Comment comment)
         {
             _context.Comments.Add(comment);
+            var post = _context.Posts.FirstOrDefault(c => c.Id == comment.postId);
+            post.comments += 1;
             return Save();
         }
 
@@ -54,7 +56,7 @@ namespace twitter_api.Repository
 
         public async Task<IEnumerable<Comment>> GetCommentByPost(int postId)
         {
-            return await _context.Comments.Where(c => c.postId == postId).ToListAsync();
+            return await _context.Comments.Include(c => c.User).Where(c => c.postId == postId).ToListAsync();
         }
 
         public async Task<bool> IncreaseLike(int commentId)
