@@ -47,6 +47,15 @@ const Posts = ({
       console.log(err);
     }
   };
+
+  const handleQuote = async () => {
+    try {
+      const res = await axios.post(`${api}/quote/${id}?userId=${user.id}`);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Link
       to={`/p/${id}`}
@@ -93,13 +102,13 @@ const Posts = ({
             </h5>
             <p>{desc}</p>
             <img className=" rounded-xl mt-4 max-h-[60vh]" src={postImg} />
-            <div className="flex justify-around mt-2 ">
+            <div className="flex gap-10 mt-2 ">
               <p>
                 <InsertCommentIcon /> {comments}
               </p>
-              <p>
+              {/* <p onClick={handleQuote}>
                 <ReplayIcon /> {quotes}
-              </p>
+              </p> */}
               <p onClick={handleLike}>
                 <FavoriteBorderIcon className={`${isLike && "text-red-500"}`} />{" "}
                 {likes}

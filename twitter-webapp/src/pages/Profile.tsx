@@ -92,6 +92,9 @@ const Profile = () => {
           id = selectedId;
         }
         const res = await axios.get(`${api}/userPostsQuotes/${id}`);
+        console.log(res.data);
+        // const rr = await axios.get(`${api}/userQuotes/${id}`);
+        // console.log(rr);
         setPosts(res.data);
       } catch (err) {
         console.log(err);
@@ -185,7 +188,7 @@ const Profile = () => {
           <>
             {posts.map((data: any) => (
               <Posts
-                profileImg={data.profileImg}
+                profileImg={data?.profileImg}
                 desc={data.description}
                 postImg={data.postImg}
                 name={data.creatorEmail}
@@ -196,6 +199,7 @@ const Profile = () => {
                 likes={data.likes}
                 quotes={data.quotes}
                 creatorId={data.creatorId}
+                // retweeted={data[0]?.isQuote}
               />
             ))}
           </>

@@ -92,11 +92,12 @@ namespace twitter_api.Repository
                 .Include(p => p.Post)
                 .Include(c => c.Post.User)
                 .Include(c => c.Comment)
-                .Where(q=>q.userId==userId)
+                .Where(q => q.userId == userId)
                 .Select(q => q.Post)
                 .ToListAsync();
-            var allPosts = posts.Concat(quotesPost).OrderByDescending(p => p.createdDate);
-            return allPosts;
+           // var allPosts = posts.Concat(quotesPost).OrderByDescending(p => p.createdDate);
+            var allPosts = posts.Concat(quotesPost);
+            return posts;
         }
 
         public async Task<bool> IncreaseComment(int postId)

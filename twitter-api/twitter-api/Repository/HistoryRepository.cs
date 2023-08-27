@@ -2,6 +2,7 @@
 using twitter_api.Data;
 using twitter_api.Models;
 using twitter_api.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace twitter_api.Repository
 {
@@ -14,22 +15,30 @@ namespace twitter_api.Repository
             _context = context;
         }
 
-        public bool Add(History history)
+
+        public async Task<bool> Add(History history)
         {
             _context.Histories.Add(history);
-            return Save();
+            return await Save();
         }
 
-        public bool Delete(History history)
+
+        public async Task<bool> Delete(History history)
         {
             _context.Histories.Remove(history);
-            return Save();
+            return await Save();
         }
 
-        public bool Save()
+        public async Task<IEnumerable<History>> GetUserHistory(int userId)
         {
-            var saved = _context.SaveChanges();
+            return await _context.Histories.Where(c => c.UserId == userId).ToListAsync();
+        }
+
+        public async Task<bool> Save()
+        {
+            var saved = await _context.SaveChangesAsync();
             return saved > 0 ? true : false;
         }
+
     }
 }

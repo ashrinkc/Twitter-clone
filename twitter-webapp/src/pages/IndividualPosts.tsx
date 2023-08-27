@@ -102,13 +102,13 @@ const IndividualPosts = () => {
               className=" rounded-xl mt-4 max-h-[60vh]"
               src="https://ichef.bbci.co.uk/images/ic/640x360/p0fqd2bp.jpg"
             /> */}
-            <div className="flex justify-around mt-2 ">
+            <div className="flex gap-10 mt-2 ">
               <p>
                 <InsertCommentIcon /> {pIn?.comments}
               </p>
-              <p>
+              {/* <p>
                 <ReplayIcon /> {pIn?.quotes}
-              </p>
+              </p> */}
               <p>
                 <FavoriteBorderIcon
                   className={`${pIn?.isLike && "text-red-500"}`}

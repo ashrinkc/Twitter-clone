@@ -4,8 +4,9 @@ namespace twitter_api.Interfaces
 {
     public interface IHistoryyRepository
     {
-        bool Add(History history);
-        bool Delete(History history);
-        bool Save();
+        Task<bool> Add(History post);
+        Task<bool> Delete(History post);
+        Task<bool> Save();
+        Task<IEnumerable<History>> GetUserHistory(int userId);
     }
 }

@@ -152,10 +152,18 @@ namespace twitter_api.Controllers
             return Ok(posts);
         }
 
+        [HttpGet("/api/userQuotes/{userId}")]
+        public async Task<IActionResult> GetUserQuotes(int userId)
+        {
+            var quotes = await _quoteRepository.GetQuotes(userId);
+            return Ok(quotes);
+        }
+
         [HttpGet("/api/userPostsQuotes/{userId}")]
         public async Task<IActionResult> GetUserPostsQuotes(int userId)
         {
             var postsAndQuotes = await _postRepository.GetPostsAndQuotesByUser(userId);
+
             var arlist = new ArrayList();
             foreach (var post in postsAndQuotes)
             {
@@ -174,6 +182,8 @@ namespace twitter_api.Controllers
                     isLike = likePosts != null,
                 });
             }
+            //var quotes = await _quoteRepository.GetQuotes(userId);
+           // arlist.Add(quotes);
             return Ok(arlist);
         }
 
@@ -200,13 +210,13 @@ namespace twitter_api.Controllers
             return Ok("Successfully updated");
         }
 
-        [HttpPost("/quote/{postId}")]
+        [HttpPost("/api/quote/{postId}")]
         public async Task<IActionResult> CreateQuote(int postId, [FromQuery] int userId)
         {
             var quote = new Quote
             {
                 userId = userId,
-                postOrcommentId = postId,
+                postId = postId,
             };
             _quoteRepository.Create(quote);
             await _postRepository.IncreaseQuote(postId);

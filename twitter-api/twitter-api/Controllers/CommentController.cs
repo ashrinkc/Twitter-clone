@@ -103,7 +103,7 @@ namespace twitter_api.Controllers
             var quote = new Quote
             {
                 userId = userId,
-                postOrcommentId = commentId,
+                commentId = commentId,
             };
             _quoteRepository.Create(quote);
             await _commentRepository.IncreaseQuote(commentId);

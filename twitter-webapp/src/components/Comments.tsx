@@ -64,10 +64,10 @@ const Comments = ({
           </h5>
           <p>{desc}</p>
           <img className=" rounded-xl mt-4 max-h-[60vh]" src={postImg} />
-          <div className="flex justify-around mt-2 ">
-            <p>
+          <div className="flex mt-2 ">
+            {/* <p>
               <ReplayIcon /> {quotes}
-            </p>
+            </p> */}
             <p onClick={handleLike}>
               <FavoriteBorderIcon className={`${isLike && "text-red-500"}`} />{" "}
               {like}
