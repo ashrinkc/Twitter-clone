@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import MessageBox from "../components/MessageBox";
 
 const style = {
   position: "absolute" as "absolute",
@@ -208,6 +209,9 @@ const Profile = () => {
             <h1>No Posts</h1>
           </div>
         )}
+        <div className=" absolute right-20 bottom-10 z-10">
+          <MessageBox />
+        </div>
       </div>
     </div>
   );

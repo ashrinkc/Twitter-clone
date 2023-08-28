@@ -114,4 +114,22 @@ export const explorePost = [
   },
 ];
 
+export const message = [
+  {
+    senderId: 2,
+    receiverId: 1,
+    msg: "Hello",
+  },
+  {
+    senderId: 1,
+    receiverId: 2,
+    msg: "Hello how are you",
+  },
+  {
+    senderId: 2,
+    receiverId: 1,
+    msg: "I am fine",
+  },
+];
+
 export const api = "https://localhost:7105/api";

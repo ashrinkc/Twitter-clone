@@ -15,6 +15,11 @@ namespace twitter_api.Repository
             _context = context;
         }
 
+        public async Task<History> GetById(int id)
+        {
+            return await _context.Histories.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
 
         public async Task<bool> Add(History history)
         {
@@ -31,7 +36,8 @@ namespace twitter_api.Repository
 
         public async Task<IEnumerable<History>> GetUserHistory(int userId)
         {
-            return await _context.Histories.Where(c => c.UserId == userId).ToListAsync();
+            return await _context.Histories.Where(c => c.UserId == userId).OrderByDescending(c=>c.CreatedDate)
+                .Take(5).ToListAsync();
         }
 
         public async Task<bool> Save()

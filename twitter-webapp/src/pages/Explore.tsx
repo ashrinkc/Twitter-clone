@@ -8,22 +8,25 @@ import { useLocation } from "react-router-dom";
 const Explore = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const val = useLocation().state.data;
-
+  const val = useLocation().state?.data;
   useEffect(() => {
     const getAllUsers = async () => {
-      const res = await axios.get(`${api}/user`);
-      setUsers(res.data);
-      console.log(res.data);
+      try {
+        const res = await axios.get(`${api}/user`);
+        setUsers(res.data);
+        if (val && val !== "") {
+          const res = users.filter((u: IUserE) => u?.username.startsWith(val));
+          setFilteredUsers(res);
+        } else {
+          console.log(users);
+          setFilteredUsers(res.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
+
     getAllUsers();
-    if (val !== "") {
-      const res = users.filter((u: IUserE) => u?.username.startsWith(val));
-      setFilteredUsers(res);
-      console.log(res);
-    } else {
-      setFilteredUsers(users);
-    }
   }, [val]);
 
   return (
@@ -31,7 +34,7 @@ const Explore = () => {
       <h1 className="font-bold text-3xl">Explore</h1>
       <hr className="mt-5" />
       <div className="mt-2 flex flex-col gap-3">
-        {filteredUsers.map((data: IUserE) => (
+        {filteredUsers?.map((data: IUserE) => (
           <People
             id={data.id}
             username={data.username}
