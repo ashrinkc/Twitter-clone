@@ -5,11 +5,12 @@ import { api, profilePost } from "../config/data";
 import { Box, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import EditProfile from "../components/EditProfile";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import MessageBox from "../components/MessageBox";
+import MessageIcon from "@mui/icons-material/Message";
 
 const style = {
   position: "absolute" as "absolute",
@@ -34,6 +35,7 @@ const Profile = () => {
   const [userS, setUserS] = useState<Iuser>();
   const [foll, setFoll] = useState();
   const [flo, setFlo] = useState();
+  const [openMsg, setOpenMsg] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector((state: RootState) => state.auth.currentUser);
@@ -161,8 +163,13 @@ const Profile = () => {
         <h1 className=" font-bold text-xl">
           {selectedId ? userS?.username : user.username}
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-500 flex">
           {selectedId ? userS?.email : user.email}
+          {selectedId && (
+            <p className="ml-1" onClick={() => setOpenMsg(true)}>
+              <MessageIcon />
+            </p>
+          )}
         </p>
         <div className="flex gap-5 text-gray-500 font-mono items-center mt-2">
           {/* <p className="flex items-center justify-center gap-2">
@@ -209,9 +216,16 @@ const Profile = () => {
             <h1>No Posts</h1>
           </div>
         )}
-        <div className=" absolute right-20 bottom-10 z-10">
-          <MessageBox />
-        </div>
+        {openMsg && (
+          <div className=" absolute right-20 bottom-10 z-10">
+            <MessageBox
+              receiverId={selectedId}
+              senderId={user.id}
+              setOpenMsg={setOpenMsg}
+              receiverName={userS?.username}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -71,7 +71,7 @@ namespace twitter_api.Repository
                 .Select(c => c.FollowingId).ToListAsync();
             return Ids;
         }
-
+         
         public async Task<Post> GetById(int id)
         {
             return await _context.Posts.Include(c=>c.User).FirstOrDefaultAsync(c => c.Id == id);

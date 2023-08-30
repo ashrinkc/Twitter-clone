@@ -18,5 +18,10 @@ namespace twitter_api.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Follower> Followers { get; set; }
         public DbSet<Following> Followings { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
+
+
 }
+
+

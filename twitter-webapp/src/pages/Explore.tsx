@@ -18,7 +18,6 @@ const Explore = () => {
           const res = users.filter((u: IUserE) => u?.username.startsWith(val));
           setFilteredUsers(res);
         } else {
-          console.log(users);
           setFilteredUsers(res.data);
         }
       } catch (err) {
