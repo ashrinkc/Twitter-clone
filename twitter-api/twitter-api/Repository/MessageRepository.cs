@@ -23,6 +23,7 @@ namespace twitter_api.Repository
         public async Task<IEnumerable<Message>> GetMsg(int senderId)
         {
             return await _context.Messages.Include(u => u.Receiver)
+                .Include(c=>c.Sender)
                 .Where(c => c.SenderId == senderId || c.ReceiverId == senderId).OrderByDescending(c=>c.dateTime).ToListAsync();
         }
 

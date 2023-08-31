@@ -58,3 +58,5 @@ D:\projects\Twitter\twitter-api\twitter-api\obj\Debug\net6.0\refint\twitter-api.
 D:\projects\Twitter\twitter-api\twitter-api\obj\Debug\net6.0\twitter-api.pdb
 D:\projects\Twitter\twitter-api\twitter-api\obj\Debug\net6.0\twitter-api.genruntimeconfig.cache
 D:\projects\Twitter\twitter-api\twitter-api\obj\Debug\net6.0\ref\twitter-api.dll
+D:\projects\Twitter\twitter-api\twitter-api\bin\Debug\net6.0\CloudinaryDotNet.dll
+D:\projects\Twitter\twitter-api\twitter-api\bin\Debug\net6.0\Newtonsoft.Json.dll

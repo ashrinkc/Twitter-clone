@@ -49,6 +49,7 @@ const MessageBox = ({
     };
     getMessages();
   }, []);
+
   return (
     <div className=" h-[55vh] w-60 p-3 pb-5 border border-black bg-white">
       <div className="h-[10%] flex justify-between">

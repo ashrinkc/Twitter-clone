@@ -2,6 +2,7 @@
 using twitter_api.Data;
 using twitter_api.Interfaces;
 using twitter_api.Models;
+using twitter_api.Service;
 
 namespace twitter_api.Repository
 {

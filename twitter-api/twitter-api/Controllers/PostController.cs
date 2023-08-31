@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using twitter_api.Dto;
 using twitter_api.Interfaces;
 using twitter_api.Models;
+using twitter_api.Service;
 
 namespace twitter_api.Controllers
 {
@@ -17,20 +18,30 @@ namespace twitter_api.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly IQuoteRepository _quoteRepository;
+        private readonly ICloudinaryService _cloudinaryService;
+
 
         public PostController(IPostRepository postRepository, ILikeRepository likeRepository,
-            IQuoteRepository quoteRepository)
+            IQuoteRepository quoteRepository, ICloudinaryService cloudinaryService)
         {
             _postRepository = postRepository;
             _likeRepository = likeRepository;
             _quoteRepository = quoteRepository;
+            _cloudinaryService = cloudinaryService;
+
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(Post post)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
+            }
+            if (post.image != null)
+            {
+                var img = await _cloudinaryService.UploadImage(post.image);
+                post.image = img.Url.ToString();
             }
             var create = await _postRepository.Create(post);
             if (!create)

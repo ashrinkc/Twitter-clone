@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using twitter_api.Data;
 using twitter_api.Interfaces;
 using twitter_api.Repository;
+using twitter_api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IQuoteRepository, QuotesRepository>();
 builder.Services.AddScoped<IHistoryyRepository, HistoryRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
