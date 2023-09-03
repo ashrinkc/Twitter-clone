@@ -1,6 +1,6 @@
 import ImageIcon from "@mui/icons-material/Image";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import { RefObject, useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { IUserData } from "../redux/authSlice";
@@ -8,8 +8,11 @@ import axios from "axios";
 import { api } from "../config/data";
 const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
   const user = useSelector((state: RootState) => state.auth.currentUser);
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
   const [input, setInput] = useState("");
   const [empty, isEmpty] = useState(true);
+  const [image, setImage] = useState<File | Blob | null | any>(null);
+
   useEffect(() => {
     Iref?.current?.focus();
   }, []);
@@ -29,11 +32,36 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
     const data = {
       description: input,
       userId: user.id,
+      image: image ? image : null,
     };
     try {
       const res = await axios.post(`${api}/post`, data);
+      console.log(res.data);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const handleImageUpload = () => {
+    inputFileRef.current?.click();
+  };
+
+  const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      console.log(file);
+      setFiletoBase(file);
+    }
+  };
+
+  const setFiletoBase = (file: File | Blob | null | any) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+        console.log(reader.result);
+      };
     }
   };
   return (
@@ -53,8 +81,14 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
       </div>
       <div className="pl-11 flex justify-between items-center">
         <div className="flex gap-1">
-          <ImageIcon style={{ fontSize: "20px" }} />
+          <ImageIcon style={{ fontSize: "20px" }} onClick={handleImageUpload} />
           <EmojiEmotionsIcon style={{ fontSize: "20px" }} />
+          <input
+            onChange={onImageChange}
+            ref={inputFileRef}
+            style={{ display: "none" }}
+            type="file"
+          />
         </div>
         <div>
           <button

@@ -80,7 +80,8 @@ namespace twitter_api.Repository
 
         public async Task<IEnumerable<Post>> GetByUsers(int userId)
         {
-            return await _context.Posts.Include(c=>c.User).Where(c => c.userId == userId).ToListAsync();
+            return await _context.Posts.Include(c=>c.User).Where(c => c.userId == userId)
+                .OrderByDescending(c=>c.createdDate).ToListAsync();
         }
 
         public async Task<IEnumerable<Post>> GetPostsAndQuotesByUser(int userId)

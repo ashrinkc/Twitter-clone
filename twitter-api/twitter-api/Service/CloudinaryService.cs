@@ -8,44 +8,45 @@ namespace twitter_api.Service
 {
     public class CloudinaryService : ICloudinaryService
     {
-        private readonly Cloudinary _cloudinary;
+        //private readonly Cloudinary _cloudinary;
 
-        public CloudinaryService(IConfiguration configuration)
-        {
-            Account cloudinaryAccount = new Account(
-                configuration["Cloudinary:CloudName"],
-                configuration["Cloudinary:ApiKey"],
-                configuration["Cloudinary:ApiSecret"]);
+        //public CloudinaryService(IConfiguration configuration)
+        //{
+        //    Account cloudinaryAccount = new Account(
+        //        configuration["Cloudinary:dcefbgyqb"],
+        //        configuration["Cloudinary:711325842671174"],
+        //        configuration["Cloudinary:D7AI02dW_OydFOO-cQ5ALgxzvsY"]);
 
-            _cloudinary = new Cloudinary(cloudinaryAccount);
-            _cloudinary.Api.Secure = true;
-        }
+        //    _cloudinary = new Cloudinary(cloudinaryAccount);
+        //    _cloudinary.Api.Secure = true;
+        //}
 
         public async Task<Image> UploadImage(string imageData)
         {
-            if (string.IsNullOrEmpty(imageData))
-            {
-                return null;
-            }
+            return null;
+            //if (string.IsNullOrEmpty(imageData))
+            //{
+            //    return null;
+            //}
 
-            byte[] imageBytes = Convert.FromBase64String(imageData);
+            //byte[] imageBytes = Convert.FromBase64String(imageData);
 
-            using (MemoryStream stream = new MemoryStream(imageBytes))
-            {
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription("image.jpg", stream),
-                    Transformation = new Transformation().Crop("limit").Width(100).Height(100)
-                };
+            //using (MemoryStream stream = new MemoryStream(imageBytes))
+            //{
+            //    var uploadParams = new ImageUploadParams
+            //    {
+            //        File = new FileDescription("image.jpg", stream),
+            //        Transformation = new Transformation().Crop("limit").Width(100).Height(100)
+            //    };
 
-                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            //    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
-                return new Image
-                {
-                    publicId = uploadResult.PublicId,
-                    Url = uploadResult.Url,
-                };
-            }
+            //    return new Image
+            //    {
+            //        publicId = uploadResult.PublicId,
+            //        Url = uploadResult.Url,
+            //    };
+            //}
         }
 
 

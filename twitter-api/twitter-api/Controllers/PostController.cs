@@ -38,11 +38,11 @@ namespace twitter_api.Controllers
             {
                 return BadRequest();
             }
-            if (post.image != null)
-            {
-                var img = await _cloudinaryService.UploadImage(post.image);
-                post.image = img.Url.ToString();
-            }
+            //if (post.image != null)
+            //{
+            //    var img = await _cloudinaryService.UploadImage(post.image);
+            //    post.image = img.Url.ToString();
+            //}
             var create = await _postRepository.Create(post);
             if (!create)
             {
@@ -96,6 +96,7 @@ namespace twitter_api.Controllers
                             createdDate=post.createdDate,
                             creatorName=post.User.username,
                             creatorEmail=post.User.email,
+                            image=post.image,
                             IsLike=false
                         });
                     }
@@ -112,6 +113,7 @@ namespace twitter_api.Controllers
                             createdDate = post.createdDate,
                             creatorName = post.User?.username,
                             creatorEmail = post.User?.email,
+                            image = post.image,
                             IsLike = true
                         });
                     }
@@ -142,6 +144,7 @@ namespace twitter_api.Controllers
                         createdDate = post.createdDate,
                         creatorName = post.User.username,
                         creatorEmail = post.User.email,
+                        image = post.image,
                         isLike = likePosts != null,
                     });
                 }
@@ -190,6 +193,7 @@ namespace twitter_api.Controllers
                     createdDate = post.createdDate,
                     creatorName = post.User.username,
                     creatorEmail = post.User.email,
+                    image=post.image,
                     isLike = likePosts != null,
                 });
             }

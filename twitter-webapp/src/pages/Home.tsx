@@ -16,11 +16,13 @@ const Home = () => {
     const getFypPosts = async () => {
       try {
         const res = await axios.get(`${api}/post?userId=${user.id}`);
+        console.log(res.data);
         setFyp(res.data);
       } catch (err) {
         console.log(err);
       }
     };
+
     const getFollowingsPosts = async () => {
       try {
         const res = await axios.get(`${api}/getFollowingsPost/${user.id}`);
@@ -33,6 +35,7 @@ const Home = () => {
     getFollowingsPosts();
     getFypPosts();
   }, []);
+
   return (
     <div>
       <h1 className="font-bold text-lg">Home</h1>
@@ -69,7 +72,7 @@ const Home = () => {
               <Posts
                 profileImg={data.profileImg}
                 desc={data.description}
-                postImg={data.postImg}
+                postImg={data.image}
                 name={data.creatorEmail}
                 username={data.creatorName}
                 id={data.id}
@@ -88,7 +91,7 @@ const Home = () => {
               <Posts
                 profileImg={data.profileImg}
                 desc={data.description}
-                postImg={data.postImg}
+                postImg={data.image}
                 name={data.creatorEmail}
                 username={data.creatorName}
                 id={data.id}

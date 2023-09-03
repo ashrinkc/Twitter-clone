@@ -198,7 +198,7 @@ const Profile = () => {
               <Posts
                 profileImg={data?.profileImg}
                 desc={data.description}
-                postImg={data.postImg}
+                postImg={data.image}
                 name={data.creatorEmail}
                 username={data.creatorName}
                 id={data.id}
