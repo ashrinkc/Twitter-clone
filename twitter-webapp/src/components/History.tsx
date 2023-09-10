@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { api, history } from "../config/data";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 import axios from "axios";
+import { changeRefresh } from "../redux/historySlice";
 
 const History = () => {
   const [historyy, setHistory] = useState([]);
   const user = useSelector((state: RootState) => state.auth.currentUser);
+  const dispatch = useDispatch<AppDispatch>();
+  const val = useSelector((state: RootState) => state.history.refresh);
   useEffect(() => {
     const getHistory = async () => {
       try {
@@ -17,12 +20,14 @@ const History = () => {
       }
     };
     getHistory();
-  }, []);
+  }, [val]);
 
   const deleteHistory = async (id: number) => {
     const res = await axios.delete(`${api}/History/${id}`);
     console.log(res.data);
+    await dispatch(changeRefresh());
   };
+
   return (
     <div className="p-2 flex flex-col gap-3 bg-gray-100 h-72 rounded-xl">
       <h1 className="font-bold text-xl">History</h1>

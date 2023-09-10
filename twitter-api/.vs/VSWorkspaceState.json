@@ -6,7 +6,8 @@
     "\\twitter-api\\Dto",
     "\\twitter-api\\Interfaces",
     "\\twitter-api\\Models",
-    "\\twitter-api\\Repository"
+    "\\twitter-api\\Repository",
+    "\\twitter-api\\Service"
   ],
   "SelectedNode": "\\twitter-api.sln",
   "PreviewInSolutionExplorer": false

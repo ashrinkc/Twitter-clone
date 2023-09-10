@@ -20,6 +20,8 @@ export interface IPost {
   quotes?: number;
   comments?: number;
   creatorId?: number;
+  setRefresh: (value: boolean) => void;
+  refresh: boolean;
 }
 const Posts = ({
   profileImg,
@@ -33,6 +35,9 @@ const Posts = ({
   likes,
   quotes,
   comments,
+  setRefresh,
+  creatorId,
+  refresh,
 }: IPost) => {
   const user = useSelector((state: RootState) => state.auth.currentUser);
   const handleLike = async () => {
@@ -43,6 +48,7 @@ const Posts = ({
     try {
       const res = await axios.post(`${api}/likeUnlike`, data);
       console.log(res.data);
+      setRefresh(!refresh);
     } catch (err) {
       console.log(err);
     }
@@ -87,14 +93,16 @@ const Posts = ({
 
         <div className="flex gap-3">
           <div className="w-[8%]">
-            <img
-              className=" rounded-full h-10"
-              src={
-                profileImg
-                  ? profileImg
-                  : "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568"
-              }
-            />
+            <Link to={`/profile`} state={creatorId}>
+              <img
+                className=" rounded-full h-10"
+                src={
+                  profileImg
+                    ? profileImg
+                    : "https://www.spongebobshop.com/cdn/shop/products/SB-Standees-Spong-3_800x.jpg?v=1603744568"
+                }
+              />
+            </Link>
           </div>
           <div className="w-[100%]">
             <h5 className="font-semibold">
@@ -102,6 +110,7 @@ const Posts = ({
             </h5>
             <p>{desc}</p>
             <img className=" rounded-xl mt-4 max-h-[60vh]" src={postImg} />
+
             <div className="flex gap-10 mt-2 ">
               <p>
                 <InsertCommentIcon /> {comments}
@@ -109,8 +118,17 @@ const Posts = ({
               {/* <p onClick={handleQuote}>
                 <ReplayIcon /> {quotes}
               </p> */}
-              <p onClick={handleLike}>
-                <FavoriteBorderIcon className={`${isLike && "text-red-500"}`} />{" "}
+              <p
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLike();
+                }}
+              >
+                <span>
+                  <FavoriteBorderIcon
+                    className={`${isLike && "text-red-500"}`}
+                  />{" "}
+                </span>
                 {likes}
               </p>
             </div>

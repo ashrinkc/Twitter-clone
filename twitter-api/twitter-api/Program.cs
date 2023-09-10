@@ -19,7 +19,7 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IQuoteRepository, QuotesRepository>();
 builder.Services.AddScoped<IHistoryyRepository, HistoryRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+//builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

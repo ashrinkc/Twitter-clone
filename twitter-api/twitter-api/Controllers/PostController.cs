@@ -18,16 +18,16 @@ namespace twitter_api.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly IQuoteRepository _quoteRepository;
-        private readonly ICloudinaryService _cloudinaryService;
+        //private readonly ICloudinaryService _cloudinaryService;
 
 
         public PostController(IPostRepository postRepository, ILikeRepository likeRepository,
-            IQuoteRepository quoteRepository, ICloudinaryService cloudinaryService)
+            IQuoteRepository quoteRepository)
         {
             _postRepository = postRepository;
             _likeRepository = likeRepository;
             _quoteRepository = quoteRepository;
-            _cloudinaryService = cloudinaryService;
+            //_cloudinaryService = cloudinaryService;
 
         }
 

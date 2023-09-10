@@ -3,12 +3,14 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../config/data";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { changeRefresh } from "../redux/historySlice";
 const SearchInput = () => {
   const [val, setVal] = useState("");
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.currentUser);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -21,6 +23,8 @@ const SearchInput = () => {
       };
       const res = await axios.post(`${api}/History`, data);
       console.log(res.data);
+      setVal("");
+      await dispatch(changeRefresh());
       navigate("/explore", { state: { data: val } });
     }
   };

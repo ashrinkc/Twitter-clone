@@ -35,6 +35,8 @@ const Profile = () => {
   const [userS, setUserS] = useState<Iuser>();
   const [foll, setFoll] = useState();
   const [flo, setFlo] = useState();
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const [uRef, setUref] = useState(false);
   const [openMsg, setOpenMsg] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -55,6 +57,7 @@ const Profile = () => {
         console.log(err);
       }
     };
+
     getUserData();
     const getUserFollowCount = async () => {
       try {
@@ -71,7 +74,7 @@ const Profile = () => {
       }
     };
     getUserFollowCount();
-  }, [selectedId]);
+  }, [selectedId, uRef]);
 
   useEffect(() => {
     const data = {
@@ -105,7 +108,7 @@ const Profile = () => {
     };
     getUserPosts();
     getRes();
-  }, []);
+  }, [uRef]);
 
   const handleFollow = async () => {
     const data = {
@@ -115,6 +118,7 @@ const Profile = () => {
     try {
       const res = await axios.post(`${api}/followUnfollow`, data);
       console.log(res);
+      setUref(!uRef);
     } catch (err) {
       console.log(err);
     }
@@ -207,6 +211,8 @@ const Profile = () => {
                 likes={data.likes}
                 quotes={data.quotes}
                 creatorId={data.creatorId}
+                setRefresh={setRefresh}
+                refresh={refresh}
                 // retweeted={data[0]?.isQuote}
               />
             ))}

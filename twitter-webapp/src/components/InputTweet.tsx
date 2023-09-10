@@ -6,7 +6,15 @@ import { RootState } from "../redux/store";
 import { IUserData } from "../redux/authSlice";
 import axios from "axios";
 import { api } from "../config/data";
-const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
+const InputTweet = ({
+  Iref,
+  setChange,
+  change,
+}: {
+  Iref?: RefObject<HTMLInputElement>;
+  setChange: (value: boolean) => void;
+  change: boolean;
+}) => {
   const user = useSelector((state: RootState) => state.auth.currentUser);
   const inputFileRef = useRef<HTMLInputElement | null>(null);
   const [input, setInput] = useState("");
@@ -16,6 +24,7 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
   useEffect(() => {
     Iref?.current?.focus();
   }, []);
+
   useEffect(() => {
     if (input.length > 0) {
       isEmpty(false);
@@ -23,6 +32,7 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
       isEmpty(true);
     }
   }, [input, setInput]);
+
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (input.length <= 0) {
@@ -36,6 +46,8 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
     };
     try {
       const res = await axios.post(`${api}/post`, data);
+      setInput("");
+      setChange(!change);
       console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -82,7 +94,7 @@ const InputTweet = ({ Iref }: { Iref?: RefObject<HTMLInputElement> }) => {
       <div className="pl-11 flex justify-between items-center">
         <div className="flex gap-1">
           <ImageIcon style={{ fontSize: "20px" }} onClick={handleImageUpload} />
-          <EmojiEmotionsIcon style={{ fontSize: "20px" }} />
+          {/* <EmojiEmotionsIcon style={{ fontSize: "20px" }} /> */}
           <input
             onChange={onImageChange}
             ref={inputFileRef}

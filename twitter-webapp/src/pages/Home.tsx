@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const [select, setIsSelect] = useState("FYP");
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const [change, setChange] = useState<boolean>(false);
   const [fyp, setFyp] = useState([]);
   const [follP, setFollP] = useState([]);
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ const Home = () => {
     };
     getFollowingsPosts();
     getFypPosts();
-  }, []);
+  }, [refresh, change]);
 
   return (
     <div>
@@ -62,7 +64,7 @@ const Home = () => {
         </div>
       </div>
       <div className="w-[100%] p-3">
-        <InputTweet Iref={inputRef} />
+        <InputTweet Iref={inputRef} change={change} setChange={setChange} />
       </div>
       <div className="mt-10">
         {select === "Following" ? (
@@ -81,6 +83,8 @@ const Home = () => {
                 likes={data.likes}
                 quotes={data.quotes}
                 creatorId={data.creatorId}
+                setRefresh={setRefresh}
+                refresh={refresh}
               />
             ))}{" "}
           </>
@@ -100,6 +104,8 @@ const Home = () => {
                 likes={data.likes}
                 quotes={data.quotes}
                 creatorId={data.creatorId}
+                setRefresh={setRefresh}
+                refresh={refresh}
               />
             ))}
           </>
